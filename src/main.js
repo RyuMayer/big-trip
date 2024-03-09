@@ -14,7 +14,7 @@ import InfoPresenter from './presenter/info-presenter';
 import AddButtonView from './view/add-button-view';
 
 const AUTHORIZATION = 'Basic 8JdP2qR4zX1mL6k';
-const END_POINT = 'https://21.objects.pages.academy/big-trip';
+const END_POINT = 'https://21.objects.htmlacademy.pro/big-trip';
 
 const eventsApiService = new EventsApiService(END_POINT, AUTHORIZATION);
 
@@ -24,17 +24,21 @@ const offersModel = new OffersModel(eventsApiService);
 const filterModel = new FilterModel();
 
 const filterPresenter = new FilterPresenter({ filterModel, eventsModel });
-const infoPresenter = new InfoPresenter({ destinationsModel, eventsModel, offersModel });
+const infoPresenter = new InfoPresenter({
+  destinationsModel,
+  eventsModel,
+  offersModel,
+});
 const tripListPresenter = new TripListPresenter({
   destinationsModel,
   offersModel,
   eventsModel,
   filterModel,
-  onAddEventDestroy: handleAddEventClose
+  onAddEventDestroy: handleAddEventClose,
 });
 
 const addButtonComponent = new AddButtonView({
-  onClick: handleAddButtonClick
+  onClick: handleAddButtonClick,
 });
 
 function handleAddButtonClick() {
@@ -47,19 +51,17 @@ function handleAddEventClose() {
   addButtonComponent.element.disabled = false;
 }
 
-render(addButtonComponent, document.querySelector('.trip-main'), RenderPosition.BEFOREEND);
+render(
+  addButtonComponent,
+  document.querySelector('.trip-main'),
+  RenderPosition.BEFOREEND,
+);
 
 filterPresenter.init();
 tripListPresenter.init();
 infoPresenter.init();
 
-Promise.all(
-  [
-    destinationsModel.init(),
-    offersModel.init(),
-    eventsModel.init()
-  ]
-)
+Promise.all([destinationsModel.init(), offersModel.init(), eventsModel.init()])
   .then(() => {
     eventsModel.start();
     addButtonComponent.element.disabled = false;
